@@ -13,7 +13,7 @@ names = []
 for n in namess.keys():
     names.append(namess[n])
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(0,cv2.CAP_DSHOW)
 
 colors = [
     [0, 255, 0],
@@ -28,7 +28,7 @@ colors = [
     [128,0,0],    
 ]
 # kirim data ke ubidots
-TOKEN = "BBFF-GQ3oWwWR1KPLgldycE0Eu2e4LH1bq8"
+TOKEN = "BBFF-nJ1zEZ8G0FNge3KjytpCCigcmaIGIP"
 DEVICE_LABEL = "Project"
 def kirim_data(payload):
     print(payload)
@@ -52,7 +52,14 @@ def kirim_data(payload):
     return True
 
 def build_payload(Jumlah,cara_masak):
-    return {"Jumlah":Jumlah,"cara_masak":cara_masak}
+    dict_message = {}
+    for key in Jumlah.keys():
+        dict_message[key] = Jumlah[key]
+    for key in cara_masak.keys():
+        dict_message[key] = cara_masak[key]
+    return dict_message
+    # return {"Jumlah":Jumlah,"cara_masak":cara_masak}
+
 # output deteksi
 while True:
     _, img = cap.read()
@@ -107,6 +114,24 @@ while True:
         'Tempe': 0,
         'Wortel': 0
     }
+
+    dict_resep = {
+        'resep_1':0,
+        'resep_2':0,
+        'resep_3':0,
+        'resep_4':0,
+        'resep_5':0,
+        'resep_6':0,
+        'resep_7':0,
+        'resep_8':0,
+        'resep_9':0,
+        'resep_10':0,
+        'resep_11':0,
+        'resep_12':0,
+        'resep_13':0
+    }
+
+
     for i in range(len(class_ids_filter)):
         dict_total_class[names[class_ids_filter[i]]] += 1
     print(dict_total_class)
@@ -297,92 +322,105 @@ while True:
     if dict_total_class["Wortel"] >= 1 and dict_total_class["Kubis"] >=1 and dict_total_class["Bawang Merah"] >=1 and dict_total_class["Bawang Putih"] >=1:
         resep.append(" ")
         cara_masak.append(Resep_1)
-        dict_total_class["Wortel"]-=1
-        dict_total_class["Kubis"] -=1
-        dict_total_class["Bawang Merah"]-=1
-        dict_total_class["Bawang Putih"] -=1
+        dict_resep["resep_1"]=1
+        # dict_total_class["Wortel"]-=1
+        # dict_total_class["Kubis"] -=1
+        # dict_total_class["Bawang Merah"]-=1
+        # dict_total_class["Bawang Putih"] -=1
 
     if dict_total_class["Telur"] >= 1:
         resep.append(" ")
         cara_masak.append(Resep_2)
-        dict_total_class["Telur"]-=1
+        dict_resep["resep_2"]=1
+        # dict_total_class["Telur"]-=1
     
     if dict_total_class["Brokoli"] >= 1:
         resep.append(" ")
         cara_masak.append(Resep_3)
-        dict_total_class["Brokoli"]-=1
-        dict_total_class["Tomat"]-=1
+        dict_resep["resep_3"]=1
+        # dict_total_class["Brokoli"]-=1
+        # dict_total_class["Tomat"]-=1
 
     if dict_total_class["Brokoli"] >= 1:
         resep.append(" ")
         cara_masak.append(Resep_4)
-        dict_total_class["Brokoli"]-=1
-        dict_total_class["Tahu Putih"]-=1
-        dict_total_class["Bawang Merah"]-=1
-        dict_total_class["Bawang putih"]-=1
+        dict_resep["resep_4"]=1
+        # dict_total_class["Brokoli"]-=1
+        # dict_total_class["Tahu Putih"]-=1
+        # dict_total_class["Bawang Merah"]-=1
+        # dict_total_class["Bawang putih"]-=1
 
     if dict_total_class["Tahu Putih"] >= 1:
         resep.append(" ")
         cara_masak.append(Resep_5)
-        dict_total_class["Tahu Putih"]-=1
-        dict_total_class["Brokoli"]-=1
-        dict_total_class["Telur"]-=1
-        dict_total_class["Bawang Merah"]-=1
-        dict_total_class["Bawang Putih"]-=1
+        dict_resep["resep_5"]=1
+        # dict_total_class["Tahu Putih"]-=1
+        # dict_total_class["Brokoli"]-=1
+        # dict_total_class["Telur"]-=1
+        # dict_total_class["Bawang Merah"]-=1
+        # dict_total_class["Bawang Putih"]-=1
 
     if dict_total_class["Tahu Putih"] >= 1:
         resep.append(" ")
         cara_masak.append(Resep_6)
-        dict_total_class["Tahu Putih"]-=1
-        dict_total_class["Bawang Putih"]-=1
+        dict_resep["resep_6"]=1
+        # dict_total_class["Tahu Putih"]-=1
+        # dict_total_class["Bawang Putih"]-=1
 
     if dict_total_class["Tahu Kuning"] >= 1:
         resep.append(" ")
         cara_masak.append(Resep_7)
-        dict_total_class["Tahu Kuning"]-=1
+        dict_resep["resep_7"]=1
+        # dict_total_class["Tahu Kuning"]-=1
 
     if dict_total_class["Tempe"] >= 1:
         resep.append(" ")
         cara_masak.append(Resep_8)
-        dict_total_class["Tempe"]-=1
+        dict_resep["resep_8"]=1
+        # dict_total_class["Tempe"]-=1
 
     if dict_total_class["Telur"] >= 1:
         resep.append(" ")
         cara_masak.append(Resep_9)
-        dict_total_class["Telur"]-=1
-        dict_total_class["Bawang Putih"]-=1
-        dict_total_class["Bawang Merah"]-=1
+        dict_resep["resep_9"]=1
+        # dict_total_class["Telur"]-=1
+        # dict_total_class["Bawang Putih"]-=1
+        # dict_total_class["Bawang Merah"]-=1
 
     if dict_total_class["Telur"] >= 1:
         resep.append(" ")
         cara_masak.append(Resep_10)
-        dict_total_class["Telur"]-=1
-        dict_total_class["Bawang Putih"]-=1
+        dict_resep["resep_10"] = 1
+        # dict_total_class["Telur"]-=1
+        # dict_total_class["Bawang Putih"]-=1
 
     if dict_total_class["Brokoli"] >= 1:
         resep.append(" ")
         cara_masak.append(Resep_11)
-        dict_total_class["Brokoli"]-=1
+        dict_resep["resep_11"] = 1
+        # dict_total_class["Brokoli"]-=1
 
     if dict_total_class["Tahu Kuning"] >= 1:
         resep.append(" ")
         cara_masak.append(Resep_12)
-        dict_total_class["Tahu Kuning"]-=1
-        dict_total_class["Bawang Putih"]-=1
+        dict_resep["resep_12"] = 1
+        # dict_total_class["Tahu Kuning"]-=1
+        # dict_total_class["Bawang Putih"]-=1
 
     if dict_total_class["Tahu Kuning"] >= 1:
         resep.append(" ")
         cara_masak.append(Resep_13)
-        dict_total_class["Tahu Kuning"]-=1
-        dict_total_class["Bawang Merah"]-=1
-        dict_total_class["Bawang Putih"]-=1
-        dict_total_class["Tomat"]-=1
+        dict_resep["resep_10"] = 1
+        # dict_total_class["Tahu Kuning"]-=1
+        # dict_total_class["Bawang Merah"]-=1
+        # dict_total_class["Bawang Putih"]-=1
+        # dict_total_class["Tomat"]-=1
 
     for i in range(len(resep)):
         print ("Resep : ")
         print(cara_masak[i])
-        payload = build_payload(dict_total_class,cara_masak)
-        kirim_data(payload)
+    payload = build_payload(dict_total_class,dict_resep)
+    kirim_data(payload)
 
     cv2.imshow("img", img)
     if cv2.waitKey(1) == ord('q'):
